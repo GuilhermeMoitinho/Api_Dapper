@@ -19,7 +19,7 @@ namespace WebApi.Services.LivroService
             
         }
 
-       public async Task<IEnumerable<Livro>> CreateLivro(Livro livro)
+       public async Task<IEnumerable<Livro>> CreateLivroAsync(Livro livro)
         {
             using (var con = new SqlConnection(_getconnection))
             {
@@ -31,18 +31,18 @@ namespace WebApi.Services.LivroService
         }
 
 
-        public async Task<IEnumerable<Livro>> DeleteLivro(int Id)
+        public async Task<IEnumerable<Livro>> DeleteLivroAsync(int id)
         {
             using (var con = new SqlConnection(_getconnection))
             {
                 var sql = "delete from Livros where id = @id";
-                await con.ExecuteAsync(sql, new {id = Id});                
+                await con.ExecuteAsync(sql, new {id = id});                
 
                 return await con.QueryAsync<Livro>("select * from Livros");
             }
         }
 
-        public async Task<IEnumerable<Livro>> GetAllLivros()
+        public async Task<IEnumerable<Livro>> GetAllLivrosAsync()
         {
             using (var con = new SqlConnection(_getconnection))
             {
@@ -51,7 +51,7 @@ namespace WebApi.Services.LivroService
             }
         }
 
-        public async Task<Livro> GetLivroById(int LivroId)
+        public async Task<Livro> GetLivroByIdAsync(int LivroId)
         {
             using (var con = new SqlConnection(_getconnection))
             {
@@ -61,7 +61,7 @@ namespace WebApi.Services.LivroService
             }
         }
 
-        public async Task<IEnumerable<Livro>> UpdateLivro(Livro livro)
+        public async Task<IEnumerable<Livro>> UpdateLivroAsync(Livro livro)
         {
             using(var con = new SqlConnection(_getconnection))
             {

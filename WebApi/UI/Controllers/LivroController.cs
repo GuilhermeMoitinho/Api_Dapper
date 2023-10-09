@@ -9,7 +9,7 @@ using WebApi.Services.LivroService;
 namespace WebApi.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/livros")]
     public class LivroController : ControllerBase
     {
         private readonly ILivroInterface _livroInterface;
@@ -18,23 +18,19 @@ namespace WebApi.Controllers
             _livroInterface = LivroInterface;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Livro>>> GetAllLivros()
+       [HttpGet]
+        public async Task<ActionResult<IEnumerable<Livro>>> GetAllLivrosAsync()
         {
-            var livros = await _livroInterface.GetAllLivros();
-
-            if(!livros.Any())
-            {
-                return NotFound("Nenhum registro localizado!");
-            }
+            var livros = await _livroInterface.GetAllLivrosAsync();
 
             return Ok(livros);
         }
 
+
         [HttpGet("{id}")]
-        public async Task<ActionResult<Livro>> GetLivroById(int id)
+        public async Task<ActionResult<Livro>> GetLivroByIdAsync(int id)
         {
-            var livro = await _livroInterface.GetLivroById(id);
+            var livro = await _livroInterface.GetLivroByIdAsync(id);
 
             if(livro == null)
             {
@@ -45,9 +41,9 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-          public async Task<ActionResult<IEnumerable<Livro>>> CreateLivro(Livro livro)
+          public async Task<ActionResult<IEnumerable<Livro>>> CreateLivroAsync(Livro livro)
           {
-            var Livro = await _livroInterface.CreateLivro(livro);
+            var Livro = await _livroInterface.CreateLivroAsync(livro);
 
             if(Livro == null)   
             {
@@ -59,31 +55,31 @@ namespace WebApi.Controllers
           }
 
         [HttpPut]
-          public async Task<ActionResult<IEnumerable<Livro>>> UpdateLivro(Livro livro)
+          public async Task<ActionResult<IEnumerable<Livro>>> UpdateLivroAsync(Livro livro)
           {
-             var Registro = await _livroInterface.GetLivroById(livro.Id);
+             var Registro = await _livroInterface.GetLivroByIdAsync(livro.Id);
 
             if(Registro == null)   
             {
                 return NotFound("Nenhum de Id foi localizado!");
             }
 
-            var LivroBanco = await _livroInterface.UpdateLivro(livro);
+            var LivroBanco = await _livroInterface.UpdateLivroAsync(livro);
 
             return Ok(LivroBanco);
           }
 
-          [HttpDelete("{Id}")]
-           public async Task<ActionResult<IEnumerable<Livro>>> DeleteLivro(int Id)
+          [HttpDelete("{id}")]
+           public async Task<ActionResult<IEnumerable<Livro>>> DeleteLivroAsync(int id)
            {
-                var Registro = await _livroInterface.GetLivroById(Id);
+                var Registro = await _livroInterface.GetLivroByIdAsync(id);
 
                 if(Registro == null)   
                 {
                     return NotFound("Nenhum de Id foi localizado!");
                 }
 
-                var LivroBanco = await _livroInterface.DeleteLivro(Id);
+                var LivroBanco = await _livroInterface.DeleteLivroAsync(id);
 
                 return Ok(LivroBanco);
            }
