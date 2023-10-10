@@ -42,14 +42,16 @@ namespace WebApi.Services.LivroService
             }
         }
 
-        public async Task<IEnumerable<Livro>> GetAllLivrosAsync()
+    public async Task<IEnumerable<Livro>> GetAllLivrosAsync(int skip, int take)
+    {
+        using (var con = new SqlConnection(_getconnection))
         {
-            using (var con = new SqlConnection(_getconnection))
-            {
-                var sql = "select * from Livros";
-                return await con.QueryAsync<Livro>(sql); 
-            }
+            var allLivros = await con.QueryAsync<Livro>("SELECT * FROM Livros");
+            return allLivros.Skip(skip).Take(take);
         }
+    }
+
+
 
         public async Task<Livro> GetLivroByIdAsync(int LivroId)
         {

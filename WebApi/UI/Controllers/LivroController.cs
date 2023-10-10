@@ -18,10 +18,10 @@ namespace WebApi.Controllers
             _livroInterface = LivroInterface;
         }
 
-       [HttpGet]
-        public async Task<ActionResult<IEnumerable<Livro>>> GetAllLivrosAsync()
+       [HttpGet("skip/{skip:int}/take/{take}")]
+        public async Task<ActionResult<IEnumerable<Livro>>> GetAllLivrosAsync(int skip = 0, int take = 15)
         {
-            var livros = await _livroInterface.GetAllLivrosAsync();
+            var livros = await _livroInterface.GetAllLivrosAsync(skip, take);
 
             return Ok(livros);
         }

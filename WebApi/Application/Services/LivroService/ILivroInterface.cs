@@ -8,7 +8,7 @@ namespace WebApi.Services.LivroService
 {
     public interface ILivroInterface
     {
-        Task<IEnumerable<Livro>> GetAllLivrosAsync();
+        Task<IEnumerable<Livro>> GetAllLivrosAsync(int skip, int take);
         Task<Livro> GetLivroByIdAsync(int LivroId);
         Task<IEnumerable<Livro>> CreateLivroAsync(Livro livro);
         Task<IEnumerable<Livro>> UpdateLivroAsync(Livro livro);
