@@ -22,29 +22,32 @@ namespace WebApi.Services.LivroService
             
         }
 
-   public async Task<ServiceResponse<IEnumerable<Livro>>> CreateLivroAsync(Livro livro)
+public async Task<ServiceResponse<IEnumerable<Livro>>> CreateLivroAsync(Livro livro)
+{
+    var serviceResponse = new ServiceResponse<IEnumerable<Livro>>();
+
+    try
     {
-        var serviceResponse = new ServiceResponse<IEnumerable<Livro>>();
-
-        try
+        using (var con = new SqlConnection(_getconnection))
         {
-            using (var con = new SqlConnection(_getconnection))
-            {
-                var sql = "INSERT INTO Livros (titulo, autor) VALUES (@Titulo, @Autor)";
-                await con.ExecuteAsync(sql, livro);
+            var sql = "INSERT INTO Livros (titulo, autor) VALUES (@Titulo, @Autor)";
+            await con.ExecuteAsync(sql, livro);
 
-                var pinto = await con.QueryAsync<Livro>("select * from Livros");
-                serviceResponse.Dados = pinto;
-            }
+            var Livros = await con.QueryAsync<Livro>("select * from Livros");
+            serviceResponse.Dados = Livros;
+            serviceResponse.Mensagem = "Criação concluída com sucesso!";
         }
-        catch (Exception x)
-        {
-            serviceResponse.Sucesso = false;
-            serviceResponse.Mensagem = "Ocorreu um erro ao criar o livro.";
-        }
+    }
+    catch (Exception x)
+    {
+        serviceResponse.Sucesso = false;
+        serviceResponse.Mensagem = "Ocorreu um erro ao criar o livro.";
+    }
 
     return serviceResponse;
 }
+
+
 
 
 
@@ -61,6 +64,7 @@ public async Task<ServiceResponse<IEnumerable<Livro>>> DeleteLivroAsync(int Livr
             
             var livros = await con.QueryAsync<Livro>("select * from Livros");
             serviceResponse.Dados = livros;
+            serviceResponse.Mensagem = "Remocao concluída com sucesso!";
         }
     }
     catch (Exception x)
@@ -82,6 +86,7 @@ public async Task<ServiceResponse<IEnumerable<Livro>>> GetAllLivrosAsync(int ski
         {
             var allLivros = await con.QueryAsync<Livro>("SELECT * FROM Livros");
             serviceResponse.Dados = allLivros.Skip(skip).Take(take);
+            serviceResponse.Mensagem = "Concluido com sucesso!";
         }
     }
     catch (Exception x)
@@ -122,6 +127,7 @@ public async Task<ServiceResponse<Livro>> GetLivroByIdAsync(int LivroId)
             else
             {
                 serviceResponse.Dados = livro;
+                serviceResponse.Mensagem = "Busca concluída com sucesso!";
             }
         }
     }
@@ -147,6 +153,7 @@ public async Task<ServiceResponse<IEnumerable<Livro>>> UpdateLivroAsync(Livro li
             
             var livros = await con.QueryAsync<Livro>("select * from Livros");
             serviceResponse.Dados = livros;
+            serviceResponse.Mensagem = "Edicao concluída com sucesso!";
         }
     }
     catch (Exception x)
