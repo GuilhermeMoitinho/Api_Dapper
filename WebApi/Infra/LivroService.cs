@@ -22,147 +22,83 @@ namespace WebApi.Services.LivroService
             
         }
 
-public async Task<ServiceResponse<IEnumerable<Livro>>> CreateLivroAsync(Livro livro)
-{
-    var serviceResponse = new ServiceResponse<IEnumerable<Livro>>();
-
-    try
-    {
-        using (var con = new SqlConnection(_getconnection))
+        public async Task<Livro> CreateLivroAsync(Livro livro)
         {
-            var sql = "INSERT INTO Livros (titulo, autor) VALUES (@Titulo, @Autor)";
-            await con.ExecuteAsync(sql, livro);
-
-            var Livros = await con.QueryAsync<Livro>("select * from Livros");
-            serviceResponse.Dados = Livros;
-            serviceResponse.Mensagem = "Criação concluída com sucesso!";
+            using (var con = new SqlConnection(_getconnection))
+            {
+                var sql = "INSERT INTO Livros (titulo, autor) VALUES (@Titulo, @Autor); SELECT SCOPE_IDENTITY()";
+                int id = await con.ExecuteScalarAsync<int>(sql, livro);
+                livro.Id = id;
+                return livro;
+            }
         }
-    }
-    catch (Exception x)
-    {
-        serviceResponse.Sucesso = false;
-        serviceResponse.Mensagem = "Ocorreu um erro ao criar o livro.";
-    }
-
-    return serviceResponse;
-}
 
 
 
 
-
-public async Task<ServiceResponse<IEnumerable<Livro>>> DeleteLivroAsync(int LivroId)
-{
-    var serviceResponse = new ServiceResponse<IEnumerable<Livro>>();
-    
-    try
-    {
-        using (var con = new SqlConnection(_getconnection))
+        public async Task DeleteLivroAsync(int LivroId)
         {
-            var sql = "delete from Livros where id = @id";
-            await con.ExecuteAsync(sql, new { id = LivroId });
-            
-            var livros = await con.QueryAsync<Livro>("select * from Livros");
-            serviceResponse.Dados = livros;
-            serviceResponse.Mensagem = "Remocao concluída com sucesso!";
+            using (var con = new SqlConnection(_getconnection))
+            {
+                var sql = "DELETE FROM Livros WHERE id = @id";
+                await con.ExecuteAsync(sql, new { id = LivroId });
+            }
         }
-    }
-    catch (Exception x)
-    {
-        serviceResponse.Sucesso = false;
-        serviceResponse.Mensagem = "Ocorreu um erro ao excluir o livro.";
-    }
 
-    return serviceResponse;
-}
 
-public async Task<ServiceResponse<IEnumerable<Livro>>> GetAllLivrosAsync(int skip, int take)
-{
-    var serviceResponse = new ServiceResponse<IEnumerable<Livro>>();
-
-    try
-    {
-        using (var con = new SqlConnection(_getconnection))
+        public async Task<IEnumerable<Livro>> GetAllLivrosAsync(int skip, int take)
         {
-            var allLivros = await con.QueryAsync<Livro>("SELECT * FROM Livros");
-            serviceResponse.Dados = allLivros.Skip(skip).Take(take);
-            serviceResponse.Mensagem = "Concluido com sucesso!";
+            using (var con = new SqlConnection(_getconnection))
+            {
+              var livros = await con.QueryAsync<Livro>("SELECT * FROM Livros");
+              return livros;
+            } 
         }
-    }
-    catch (Exception x)
-    {
-        serviceResponse.Sucesso = false;
-        serviceResponse.Mensagem = "Ocorreu um erro ao buscar os livros.";
-    }
-    
-    return serviceResponse;
-}
 
-public async Task<double> CountLivrosInDatabase()
+        public async Task<double> CountLivrosInDatabase()
+        {
+            using(var con = new SqlConnection(_getconnection))
+            {
+                var count = await con.ExecuteScalarAsync<double>("SELECT COUNT(*) FROM Livros");
+                return count;
+            }
+        }
+
+
+public async  Task<Livro> GetLivroByIdAsync(int id)
 {
-    using(var con = new SqlConnection(_getconnection))
-    {
-        var count = await con.ExecuteScalarAsync<double>("SELECT COUNT(*) FROM Livros");
-        return count;
-    }
-}
 
-
-public async Task<ServiceResponse<Livro>> GetLivroByIdAsync(int LivroId)
-{
-    var serviceResponse = new ServiceResponse<Livro>();
-
-    try
-    {
         using (var con = new SqlConnection(_getconnection))
         {
-            var sql = $"select * from Livros where id = {LivroId}";
-            var livro = await con.QueryFirstOrDefaultAsync<Livro>(sql);
-            
-            if (livro == null)
+            var sql = $"select * from Livros where id = {id}";
+           return await con.QueryFirstOrDefaultAsync<Livro>(sql);
+        }
+
+}
+
+        public async Task<ServiceResponse<IEnumerable<Livro>>> UpdateLivroAsync(Livro livro)
+        {
+            var serviceResponse = new ServiceResponse<IEnumerable<Livro>>();
+
+            try
+            {
+                using (var con = new SqlConnection(_getconnection))
+                {
+                    var sql = "UPDATE Livros SET titulo = @Titulo, autor = @Autor WHERE id = @Id";
+                    await con.ExecuteAsync(sql, livro);
+
+                    serviceResponse.Mensagem = "Edição concluída com sucesso!";
+                }
+            }
+            catch (Exception x)
             {
                 serviceResponse.Sucesso = false;
-                serviceResponse.Mensagem = "Livro não encontrado.";
+                serviceResponse.Mensagem = "Ocorreu um erro ao atualizar o livro.";
             }
-            else
-            {
-                serviceResponse.Dados = livro;
-                serviceResponse.Mensagem = "Busca concluída com sucesso!";
-            }
+
+            return serviceResponse;
         }
-    }
-    catch (Exception x)
-    {
-        serviceResponse.Sucesso = false;
-        serviceResponse.Mensagem = "Ocorreu um erro ao buscar o livro.";
-    }
 
-    return serviceResponse;
-}
 
-public async Task<ServiceResponse<IEnumerable<Livro>>> UpdateLivroAsync(Livro livro)
-{
-    var serviceResponse = new ServiceResponse<IEnumerable<Livro>>();
-
-    try
-    {
-        using(var con = new SqlConnection(_getconnection))
-        {
-            var sql = "update Livros set titulo = @Titulo, autor = @Autor where id = @Id";
-            await con.ExecuteAsync(sql, livro);
-            
-            var livros = await con.QueryAsync<Livro>("select * from Livros");
-            serviceResponse.Dados = livros;
-            serviceResponse.Mensagem = "Edicao concluída com sucesso!";
-        }
-    }
-    catch (Exception x)
-    {
-        serviceResponse.Sucesso = false;
-        serviceResponse.Mensagem = "Ocorreu um erro ao atualizar o livro.";
-    }
-
-    return serviceResponse;
-}
     }
 }

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "bnUg6xvAvckHkLA7Llg6CaM15Vz12ETa6kvrd816dOX+wlSOTEop13VdVHkW+1vccc1F9dSOmYcUVAeXsJL7ZQ==",
+  "dgSpecHash": "95o4zmlKlNXH2V8DrdyQzbD0m6u82DUhzhM49b74CtSpmXKkJBpuw1xWNAWnfeELBsd3GZSq7Y3sgMugrC098Q==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Guilherme Moitinho\\Desktop\\Crud_Dapper\\WebApi\\WebApi.csproj",
+  "projectFilePath": "D:\\Estudos\\EstudoPrograma\\Crud_Dapper\\WebApi\\WebApi.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Guilherme Moitinho\\.nuget\\packages\\dapper\\2.1.4\\dapper.2.1.4.nupkg.sha512",
     "C:\\Users\\Guilherme Moitinho\\.nuget\\packages\\microsoft.aspnetcore.openapi\\7.0.10\\microsoft.aspnetcore.openapi.7.0.10.nupkg.sha512",
@@ -20,7 +20,11 @@
     "C:\\Users\\Guilherme Moitinho\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\6.5.0\\swashbuckle.aspnetcore.swaggerui.6.5.0.nupkg.sha512",
     "C:\\Users\\Guilherme Moitinho\\.nuget\\packages\\system.data.sqlclient\\4.8.5\\system.data.sqlclient.4.8.5.nupkg.sha512",
     "C:\\Users\\Guilherme Moitinho\\.nuget\\packages\\system.security.accesscontrol\\4.7.0\\system.security.accesscontrol.4.7.0.nupkg.sha512",
-    "C:\\Users\\Guilherme Moitinho\\.nuget\\packages\\system.security.principal.windows\\4.7.0\\system.security.principal.windows.4.7.0.nupkg.sha512"
+    "C:\\Users\\Guilherme Moitinho\\.nuget\\packages\\system.security.principal.windows\\4.7.0\\system.security.principal.windows.4.7.0.nupkg.sha512",
+    "C:\\Users\\Guilherme Moitinho\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\7.0.14\\microsoft.windowsdesktop.app.ref.7.0.14.nupkg.sha512",
+    "C:\\Users\\Guilherme Moitinho\\.nuget\\packages\\microsoft.netcore.app.ref\\7.0.14\\microsoft.netcore.app.ref.7.0.14.nupkg.sha512",
+    "C:\\Users\\Guilherme Moitinho\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\7.0.14\\microsoft.aspnetcore.app.ref.7.0.14.nupkg.sha512",
+    "C:\\Users\\Guilherme Moitinho\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\7.0.14\\microsoft.netcore.app.host.win-x64.7.0.14.nupkg.sha512"
   ],
   "logs": []
 }

@@ -10,7 +10,7 @@ using WebApi.Services.LivroService;
 namespace WebApi.Controllers
 {
     [ApiController]
-    [Route("api/livros")]
+    [Route("[controller]")]
     public class LivroController : ControllerBase
     {
         private readonly ILivroInterface _livroInterface;
@@ -19,38 +19,71 @@ namespace WebApi.Controllers
             _livroInterface = LivroInterface;
         }
 
-        [HttpGet("skip/{skip:int}/take/{take}")]
-        public async Task<ServiceResponse<IEnumerable<Livro>>> GetAllLivrosAsync(int skip = 0, int take = 15)
+       [HttpGet("skip/{skip:int}/take/{take}")]
+        public async Task<IActionResult> GetAllLivrosAsync(int skip = 0, int take = 15)
         {
-            return await _livroInterface.GetAllLivrosAsync(skip, take);
+           var value = await _livroInterface.GetAllLivrosAsync(skip, take);
+            return Ok(value);
         }
 
 
 
 
+        [ActionName("GetLivroByIdAsync")]
         [HttpGet("{id}")]
-        public async Task<ServiceResponse<Livro>> GetLivroByIdAsync(int id)
+        public async Task<IActionResult> GetLivroByIdAsync(int id)
         {
-            return await _livroInterface.GetLivroByIdAsync(id);
+            if(id == null) return NotFound();
+
+            var livro = await _livroInterface.GetLivroByIdAsync(id);
+
+            if(livro is null) return NotFound();
+                    
+
+            var retorno = new {
+                Sucesso = true,
+                Dados = livro,
+                Mensagem = "Seu Livro foi requisitado"
+            };
+
+            return Ok(retorno);
+
+            
         }
 
         [HttpPost]
-          public async Task<ServiceResponse<IEnumerable<Livro>>> CreateLivroAsync(Livro livro)
-          {
-             return await _livroInterface.CreateLivroAsync(livro);
-          }
+        public async Task<IActionResult> CreateLivroAsync(Livro livro)
+        {
+            var createdLivro = await _livroInterface.CreateLivroAsync(livro);
+
+            var retorno = new
+            {
+                mesagem = "Tudo certo",
+                dadas = createdLivro,
+                id = createdLivro.Id
+            };
+
+            return CreatedAtAction(nameof(GetLivroByIdAsync), new { id = createdLivro.Id }, retorno);
+        }
+
+
+
 
 
         [HttpPut]
-          public async Task<ServiceResponse<IEnumerable<Livro>>> UpdateLivroAsync(Livro livro)
+          public async Task<IActionResult> UpdateLivroAsync(Livro livro)
           {
-             return await _livroInterface.UpdateLivroAsync(livro);
+              await _livroInterface.UpdateLivroAsync(livro);
+
+              return NoContent();
           }
 
           [HttpDelete("{id}")]
-           public async Task<ServiceResponse<IEnumerable<Livro>>> DeleteLivroAsync(int id)
+           public async Task<IActionResult> DeleteLivroAsync(int id)
            {
-              return await _livroInterface.DeleteLivroAsync(id);
+                await _livroInterface.DeleteLivroAsync(id);
+
+                return NoContent();
            }
 
     }
